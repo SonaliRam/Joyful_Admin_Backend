@@ -10,7 +10,15 @@ import com.joyful.entity.Admin;
 import com.joyful.service.AdminService;
 
 @RestController
-@CrossOrigin(origins = "*")
+@CrossOrigin(
+		  origins = {
+		    "http://localhost:5173",
+		    "http://localhost:5174",
+		    "http://localhost:3000",
+		    "https://markweb-joyful.netlify.app"
+		  },
+		  allowCredentials = "true"
+		)
 public class AdminController {
 
     @Autowired

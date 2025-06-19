@@ -10,10 +10,10 @@ import lombok.Setter;
 @Setter
 public class Admin {
 	@Id
-	private String LoginID;
+	private String loginID;
 	private String password;
 	@Override
 	public String toString() {
-		return "Admin [LoginID=" + LoginID + ", password=" + password + "]";
+		return "Admin [LoginID=" + loginID + ", password=" + password + "]";
 	}
 }
