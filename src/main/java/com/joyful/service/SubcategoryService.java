@@ -14,4 +14,7 @@ public interface SubcategoryService {
 	Subcategory getSubcategoryById(Long id);
 
 	List<Subcategory> getAllSubcategories();
+
+	List<Subcategory> getSubcategoriesByCategory(Long categoryId);
+
 }

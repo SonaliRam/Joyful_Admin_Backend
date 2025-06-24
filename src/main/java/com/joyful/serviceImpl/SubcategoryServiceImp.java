@@ -49,4 +49,13 @@ public class SubcategoryServiceImp implements SubcategoryService {
 	public List<Subcategory> getAllSubcategories() {
 		return subcategoryRepo.findAll();
 	}
+
+	@Autowired
+	private SubcategoryRepository subcategoryRepository;
+
+	@Override
+	public List<Subcategory> getSubcategoriesByCategory(Long categoryId) {
+		return subcategoryRepository.findByCategoryId(categoryId);
+	}
+
 }

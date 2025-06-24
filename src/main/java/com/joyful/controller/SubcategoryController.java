@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.joyful.entity.Subcategory;
+import com.joyful.repository.SubcategoryRepository;
 import com.joyful.service.SubcategoryService;
 
 @RestController
@@ -21,8 +22,14 @@ import com.joyful.service.SubcategoryService;
 @CrossOrigin("*")
 public class SubcategoryController {
 
+    private final SubcategoryRepository subcategoryRepository;
+
     @Autowired
     private SubcategoryService subcategoryService;
+
+    SubcategoryController(SubcategoryRepository subcategoryRepository) {
+        this.subcategoryRepository = subcategoryRepository;
+    }
 
     @PostMapping
     public Subcategory addSubcategory(@RequestBody Subcategory subcategory) {
@@ -48,4 +55,9 @@ public class SubcategoryController {
     public Subcategory getSubcategoryById(@PathVariable Long id) {
         return subcategoryService.getSubcategoryById(id);
     }
+    @GetMapping("/byCategory/{categoryId}")
+    public List<Subcategory> getSubcategoriesByCategory(@PathVariable Long categoryId) {
+    	return subcategoryRepository.findByCategoryId(categoryId);
+    }
+
 }

@@ -1,20 +1,23 @@
 package com.joyful.entity;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
-
 public class Subcategory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +34,10 @@ public class Subcategory {
 	@JoinColumn(name = "category_id")
 	@JsonIgnoreProperties("subcategories") // ignore only this field
 	private Category category;
+	
+	
+	@OneToMany(mappedBy = "subcategory", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties("subcategory")
+	private List<Product> products;
+
 }

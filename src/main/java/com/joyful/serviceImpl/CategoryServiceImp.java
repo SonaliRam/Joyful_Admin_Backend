@@ -1,12 +1,13 @@
 package com.joyful.serviceImpl;
 
-import com.joyful.entity.Category;
-import com.joyful.repository.CategoryRepository;
-import com.joyful.service.CategoryService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import com.joyful.entity.Category;
+import com.joyful.repository.CategoryRepository;
+import com.joyful.service.CategoryService;
 
 @Service
 public class CategoryServiceImp implements CategoryService {
@@ -24,9 +25,9 @@ public class CategoryServiceImp implements CategoryService {
 		Category cat = categoryRepo.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
 		cat.setName(updatedCategory.getName());
 		cat.setDescription(updatedCategory.getDescription());
-		cat.setImagePath(updatedCategory.getImagePath());
 		cat.setSearchKeywords(updatedCategory.getSearchKeywords());
 		cat.setSeoTitle(updatedCategory.getSeoTitle());
+		cat.setImageLink(updatedCategory.getImageLink());
 		cat.setSeoKeywords(updatedCategory.getSeoKeywords());
 		cat.setSeoDescription(updatedCategory.getSeoDescription());
 		cat.setPublished(updatedCategory.isPublished());

@@ -16,13 +16,14 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+
 public class Category {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String imagePath; // Store image path after upload
     private String description;
     private String searchKeywords;
+    private String imageLink;
     private String seoTitle;
     private String seoKeywords;
     private String seoDescription;
