@@ -1,6 +1,7 @@
 package com.joyful.serviceImpl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,11 +26,11 @@ public class CategoryServiceImp implements CategoryService {
 		Category cat = categoryRepo.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
 		cat.setName(updatedCategory.getName());
 		cat.setDescription(updatedCategory.getDescription());
-		cat.setSearchKeywords(updatedCategory.getSearchKeywords());
-		cat.setSeoTitle(updatedCategory.getSeoTitle());
-		cat.setImageLink(updatedCategory.getImageLink());
-		cat.setSeoKeywords(updatedCategory.getSeoKeywords());
-		cat.setSeoDescription(updatedCategory.getSeoDescription());
+		cat.setSearchkeywords(updatedCategory.getSearchkeywords());
+		cat.setSeotitle(updatedCategory.getSeotitle());
+		cat.setImagelink(updatedCategory.getImagelink());
+		cat.setSeokeywords(updatedCategory.getSeokeywords());
+		cat.setSeodescription(updatedCategory.getSeodescription());
 		cat.setPublished(updatedCategory.isPublished());
 		return categoryRepo.save(cat);
 	}
@@ -48,4 +49,9 @@ public class CategoryServiceImp implements CategoryService {
 	public List<Category> getAllCategories() {
 		return categoryRepo.findAll();
 	}
+	@Override
+	public Optional<Category> getCategoryByName(String name) {
+	    return categoryRepo.findByNameIgnoreCase(name);   // or findByNameIgnoreCase(name)
+	}
+
 }

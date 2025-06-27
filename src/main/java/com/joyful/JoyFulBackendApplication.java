@@ -11,4 +11,3 @@ public class JoyFulBackendApplication {
 		System.out.println("APPLICATION STARTED");
 	}
 }
-
