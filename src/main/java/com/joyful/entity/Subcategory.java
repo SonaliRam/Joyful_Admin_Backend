@@ -1,18 +1,19 @@
 package com.joyful.entity;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,6 +34,7 @@ public class Subcategory {
 
 	@Column(name = "ispublished")
 	private boolean ispublished;
+
 	@Column(name = "description", columnDefinition = "TEXT")
 	private String description;
 
@@ -42,12 +44,18 @@ public class Subcategory {
 	@Column(name = "seokeywords", columnDefinition = "TEXT")
 	private String seokeywords;
 
-	@ManyToOne
-	@JoinColumn(name = "category_id")
-	@JsonIgnoreProperties("subcategories") // ignore only this field
-	private Category category;
+	@ManyToMany
+	@JoinTable(
+	  name = "subcategory_category",
+	  joinColumns = @JoinColumn(name = "subcategory_id"),
+	  inverseJoinColumns = @JoinColumn(name = "category_id")
+	)
+	@JsonIgnoreProperties("subcategories")
+	private List<Category> categories;
 
-	@OneToMany(mappedBy = "subcategory", cascade = CascadeType.ALL)
-	@JsonIgnoreProperties("subcategory")
-	private List<Product> products;
+
+	@ManyToMany(mappedBy = "subcategories")
+	@JsonIgnoreProperties("subcategories")
+	private Set<Product> products = new HashSet<>();
+
 }

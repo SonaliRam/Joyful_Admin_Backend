@@ -42,6 +42,7 @@ public class ProductController {
 
 	@PutMapping("/{id}")
 	public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
+		System.out.println("ispublished: " + product.getIspublished());
 		return productService.updateProduct(id, product);
 	}
 

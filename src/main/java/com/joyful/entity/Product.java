@@ -1,7 +1,9 @@
 package com.joyful.entity;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -13,7 +15,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.MapKeyColumn;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,39 +30,57 @@ public class Product {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "id")
 	private Long id;
 
-	private String name; // Product name
+	@Column(name = "name")
+	private String name;
 
+	@Column(name = "description", columnDefinition = "TEXT")
 	private String description;
 
-	private String variation; // Any custom variation
+	@Column(name = "variation")
+	private String variation;
 
+	@Column(name = "size")
 	private String size;
 
-	private String mainImage; // Path to the main image
+	@Column(name = "mainimage")
+	private String mainimage;
 
 	@ElementCollection
-	@CollectionTable(name = "product_colors", joinColumns = @JoinColumn(name = "product_id"))
+	@CollectionTable(name = "productcolors", joinColumns = @JoinColumn(name = "productid"))
 	@MapKeyColumn(name = "color")
-	@Column(name = "image_path")
-	private Map<String, String> colorImages; // Map<Color, SubImagePath>
+	@Column(name = "imagepath")
+	private Map<String, String> colorimages;
 
 	@ElementCollection
-	private List<String> productTags; // e.g., ["eco-friendly", "best seller"]
+	@Column(name = "producttags")
+	private List<String> producttags;
 
-	private String filter; // Can later be changed to a list if needed
+	@Column(name = "filter")
+	private String filter;
 
 	// SEO Fields
-	private String metaTitle;
-	private String metaDescription;
-	private String pageKeywords;
+	@Column(name = "metatitle")
+	private String metatitle;
 
-	private boolean isPublished;
+	@Column(name = "metadescription", columnDefinition = "TEXT")
+	private String metadescription;
+
+	@Column(name = "pagekeywords")
+	private String pagekeywords;
+
+	@Column(name = "ispublished", nullable = false)
+	private Boolean ispublished;
+
+	public void setIspublished(boolean ispublished) {
+		this.ispublished = ispublished;
+	}
 
 	// Subcategory Relationship
-	@ManyToOne
-	@JoinColumn(name = "subcategory_id")
+	@ManyToMany
+	@JoinTable(name = "productsubcategory", joinColumns = @JoinColumn(name = "productid"), inverseJoinColumns = @JoinColumn(name = "subcategoryid"))
 	@JsonIgnoreProperties("products")
-	private Subcategory subcategory;
+	private Set<Subcategory> subcategories = new HashSet<>();
 }

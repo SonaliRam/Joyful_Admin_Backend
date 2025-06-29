@@ -1,13 +1,14 @@
 package com.joyful.serviceImpl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.joyful.entity.Category; // ✅ NEW: Import Category entity
+import com.joyful.entity.Category;
 import com.joyful.entity.Subcategory;
-import com.joyful.repository.CategoryRepository; // ✅ NEW: Import CategoryRepository
+import com.joyful.repository.CategoryRepository;
 import com.joyful.repository.SubcategoryRepository;
 import com.joyful.service.SubcategoryService;
 
@@ -17,12 +18,19 @@ public class SubcategoryServiceImp implements SubcategoryService {
 	@Autowired
 	private SubcategoryRepository subcategoryRepo;
 
-	// ✅ NEW: Inject CategoryRepository to fetch category by ID
 	@Autowired
 	private CategoryRepository categoryRepo;
 
 	@Override
 	public Subcategory addSubcategory(Subcategory subcategory) {
+		// ✅ Fetch valid categories from DB by ID
+		List<Category> validCategories = subcategory.getCategories().stream()
+				.map(cat -> categoryRepo.findById(cat.getId())
+						.orElseThrow(() -> new RuntimeException("Category not found: " + cat.getId())))
+				.collect(Collectors.toList());
+
+		subcategory.setCategories(validCategories);
+
 		return subcategoryRepo.save(subcategory);
 	}
 
@@ -36,19 +44,22 @@ public class SubcategoryServiceImp implements SubcategoryService {
 			sub.setDescription(updatedSubcategory.getDescription());
 			sub.setImagepath(updatedSubcategory.getImagepath());
 			sub.setMetatitle(updatedSubcategory.getMetatitle());
-			sub.setMetadescription(updatedSubcategory.getMetatitle()); // 👈 double-check this line
+			sub.setMetadescription(updatedSubcategory.getMetadescription());
 			sub.setSeokeywords(updatedSubcategory.getSeokeywords());
 			sub.setIspublished(updatedSubcategory.isIspublished());
 
-			Long categoryId = updatedSubcategory.getCategory().getId();
-			Category category = categoryRepo.findById(categoryId)
-					.orElseThrow(() -> new RuntimeException("Category not found"));
-			sub.setCategory(category);
+			// ✅ Update category list
+			List<Category> validCategories = updatedSubcategory.getCategories().stream()
+					.map(cat -> categoryRepo.findById(cat.getId())
+							.orElseThrow(() -> new RuntimeException("Category not found: " + cat.getId())))
+					.collect(Collectors.toList());
+
+			sub.setCategories(validCategories);
 
 			return subcategoryRepo.save(sub);
 
 		} catch (Exception e) {
-			e.printStackTrace(); // ✅ THIS WILL SHOW FULL ERROR IN TERMINAL
+			e.printStackTrace();
 			throw new RuntimeException("Failed to update subcategory: " + e.getMessage());
 		}
 	}
@@ -68,7 +79,6 @@ public class SubcategoryServiceImp implements SubcategoryService {
 		return subcategoryRepo.findAll();
 	}
 
-	// 🔁 You had duplicate repo, removing extra one and keeping clean
 	@Override
 	public List<Subcategory> getSubcategoriesByCategory(Long categoryId) {
 		return subcategoryRepo.findByCategoryId(categoryId);

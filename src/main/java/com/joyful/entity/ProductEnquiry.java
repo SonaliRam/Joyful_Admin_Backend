@@ -1,6 +1,6 @@
 package com.joyful.entity;
 
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,15 +13,19 @@ import lombok.Setter;
 @Setter
 public class ProductEnquiry {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String fullName;
-    private String email;
-    private String phone;
-    private String product;
-    private String message;
+	@Column(name = "fullName")
+	private String fullName;
+	@Column(name = "email")
+	private String email;
+	@Column(name = "phone")
+	private String phone;
+	@Column(name = "product")
+	private String product;
+	@Column(name = "message", columnDefinition = "TEXT")
+	private String message;
 
-  
 }

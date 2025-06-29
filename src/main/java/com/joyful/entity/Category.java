@@ -4,13 +4,12 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,11 +20,11 @@ public class Category {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Column(name = "name")
 	private String name;
 
-	@Column(name = "description")
+	@Column(name = "description", columnDefinition = "TEXT")
 	private String description;
 
 	@Column(name = "searchkeywords")
@@ -40,13 +39,15 @@ public class Category {
 	@Column(name = "seokeywords")
 	private String seokeywords;
 
-	@Column(name = "seodescription")
+	@Column(name = "seodescription", columnDefinition = "TEXT")
 	private String seodescription;
+
 	@Column(nullable = false)
 	private boolean Published = false;
 
-	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-	@JsonIgnoreProperties("category") // prevent infinite loop
+	// ✅ CORRECTED MANY-TO-MANY relationship with Subcategory
+	@ManyToMany(mappedBy = "categories")
+	@JsonIgnoreProperties("categories")
 	private List<Subcategory> subcategories;
 
 	public boolean isPublished() {
