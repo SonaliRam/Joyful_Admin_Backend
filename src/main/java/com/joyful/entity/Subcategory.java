@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -45,17 +46,16 @@ public class Subcategory {
 	private String seokeywords;
 
 	@ManyToMany
-	@JoinTable(
-	  name = "subcategory_category",
-	  joinColumns = @JoinColumn(name = "subcategory_id"),
-	  inverseJoinColumns = @JoinColumn(name = "category_id")
-	)
+	@JoinTable(name = "subcategory_category", joinColumns = @JoinColumn(name = "subcategory_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	@JsonIgnoreProperties("subcategories")
 	private List<Category> categories;
 
-
+//	@ManyToMany(mappedBy = "subcategories")
+//	@JsonIgnoreProperties("subcategories")
+//	private Set<Product> products = new HashSet<>();
+	
 	@ManyToMany(mappedBy = "subcategories")
-	@JsonIgnoreProperties("subcategories")
+	@JsonIgnore // ✅ temporarily skip products in JSON to fix 500 error
 	private Set<Product> products = new HashSet<>();
 
 }

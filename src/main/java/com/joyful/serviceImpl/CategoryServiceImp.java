@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.joyful.entity.Category;
+import com.joyful.entity.Subcategory;
 import com.joyful.repository.CategoryRepository;
 import com.joyful.service.CategoryService;
 
@@ -31,7 +32,7 @@ public class CategoryServiceImp implements CategoryService {
 		cat.setImagelink(updatedCategory.getImagelink());
 		cat.setSeokeywords(updatedCategory.getSeokeywords());
 		cat.setSeodescription(updatedCategory.getSeodescription());
-		cat.setPublished(updatedCategory.isPublished());
+		cat.setPublished(updatedCategory.getPublished());
 		return categoryRepo.save(cat);
 	}
 
@@ -53,5 +54,5 @@ public class CategoryServiceImp implements CategoryService {
 	public Optional<Category> getCategoryByName(String name) {
 	    return categoryRepo.findByNameIgnoreCase(name);   // or findByNameIgnoreCase(name)
 	}
-
+	
 }

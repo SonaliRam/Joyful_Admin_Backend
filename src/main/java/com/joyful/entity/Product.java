@@ -2,22 +2,22 @@ package com.joyful.entity;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
-import jakarta.persistence.MapKeyColumn;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -39,20 +39,8 @@ public class Product {
 	@Column(name = "description", columnDefinition = "TEXT")
 	private String description;
 
-	@Column(name = "variation")
-	private String variation;
-
-	@Column(name = "size")
-	private String size;
-
 	@Column(name = "mainimage")
 	private String mainimage;
-
-	@ElementCollection
-	@CollectionTable(name = "productcolors", joinColumns = @JoinColumn(name = "productid"))
-	@MapKeyColumn(name = "color")
-	@Column(name = "imagepath")
-	private Map<String, String> colorimages;
 
 	@ElementCollection
 	@Column(name = "producttags")
@@ -83,4 +71,11 @@ public class Product {
 	@JoinTable(name = "productsubcategory", joinColumns = @JoinColumn(name = "productid"), inverseJoinColumns = @JoinColumn(name = "subcategoryid"))
 	@JsonIgnoreProperties("products")
 	private Set<Subcategory> subcategories = new HashSet<>();
+
+	@Lob
+	@Basic(fetch = FetchType.EAGER) // ✅ This is the key fix
+	@Column(name = "variantsmap", columnDefinition = "TEXT")
+	private String variantsMap;
+
+
 }

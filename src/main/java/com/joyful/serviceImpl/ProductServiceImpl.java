@@ -37,10 +37,7 @@ public class ProductServiceImpl implements ProductService {
 
 		existing.setName(updatedProduct.getName());
 		existing.setDescription(updatedProduct.getDescription());
-		existing.setVariation(updatedProduct.getVariation());
-		existing.setSize(updatedProduct.getSize());
 		existing.setMainimage(updatedProduct.getMainimage());
-		existing.setColorimages(updatedProduct.getColorimages());
 		existing.setProducttags(updatedProduct.getProducttags());
 		existing.setFilter(updatedProduct.getFilter());
 		existing.setMetatitle(updatedProduct.getMetatitle());
@@ -48,12 +45,12 @@ public class ProductServiceImpl implements ProductService {
 		existing.setPagekeywords(updatedProduct.getPagekeywords());
 		existing.setIspublished(updatedProduct.getIspublished());
 		existing.setSubcategories(updatedProduct.getSubcategories());
-
+		existing.setVariantsMap(updatedProduct.getVariantsMap());
 		return productRepository.save(existing);
 	}
 
 	@Override
 	public void deleteProduct(Long id) {
 		productRepository.deleteById(id);
-	}
-}
+	} 
+} 
