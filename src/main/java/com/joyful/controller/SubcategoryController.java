@@ -3,6 +3,7 @@ package com.joyful.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,42 +23,49 @@ import com.joyful.service.SubcategoryService;
 @CrossOrigin("*")
 public class SubcategoryController {
 
-    private final SubcategoryRepository subcategoryRepository;
+	private final SubcategoryRepository subcategoryRepository;
 
-    @Autowired
-    private SubcategoryService subcategoryService;
+	@Autowired
+	private SubcategoryService subcategoryService;
 
-    SubcategoryController(SubcategoryRepository subcategoryRepository) {
-        this.subcategoryRepository = subcategoryRepository;
-    }
+	SubcategoryController(SubcategoryRepository subcategoryRepository) {
+		this.subcategoryRepository = subcategoryRepository;
+	}
 
-    @PostMapping
-    public Subcategory addSubcategory(@RequestBody Subcategory subcategory) {
-        return subcategoryService.addSubcategory(subcategory);
-    }
+	@PostMapping
+	public Subcategory addSubcategory(@RequestBody Subcategory subcategory) {
+		return subcategoryService.addSubcategory(subcategory);
+	}
 
-    @PutMapping("/{id}")
-    public Subcategory updateSubcategory(@PathVariable Long id, @RequestBody Subcategory subcategory) {
-        return subcategoryService.updateSubcategory(id, subcategory);
-    }
+	@PutMapping("/{id}")
+	public Subcategory updateSubcategory(@PathVariable Long id, @RequestBody Subcategory subcategory) {
+		return subcategoryService.updateSubcategory(id, subcategory);
+	}
 
-    @DeleteMapping("/{id}")
-    public void deleteSubcategory(@PathVariable Long id) {
-        subcategoryService.deleteSubcategory(id);
-    }
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteSubcategory(@PathVariable Long id) {
+		if (subcategoryService.hasProducts(id)) {
+			return ResponseEntity.status(409)
+					.body(java.util.Map.of("message", "This Sub-Category has products associated with it. Please delete product first."));
+		}
 
-    @GetMapping
-    public List<Subcategory> getAllSubcategories() {
-        return subcategoryService.getAllSubcategories();
-    }
+		subcategoryService.deleteSubcategory(id);
+		return ResponseEntity.ok().build();
+	}
 
-    @GetMapping("/{id}")
-    public Subcategory getSubcategoryById(@PathVariable Long id) {
-        return subcategoryService.getSubcategoryById(id);
-    }
-    @GetMapping("/byCategory/{categoryId}")
-    public List<Subcategory> getSubcategoriesByCategory(@PathVariable Long categoryId) {
-    	return subcategoryRepository.findByCategoryId(categoryId);
-    }
+	@GetMapping
+	public List<Subcategory> getAllSubcategories() {
+		return subcategoryService.getAllSubcategories();
+	}
+
+	@GetMapping("/{id}")
+	public Subcategory getSubcategoryById(@PathVariable Long id) {
+		return subcategoryService.getSubcategoryById(id);
+	}
+
+	@GetMapping("/byCategory/{categoryId}")
+	public List<Subcategory> getSubcategoriesByCategory(@PathVariable Long categoryId) {
+		return subcategoryRepository.findByCategoryId(categoryId);
+	}
 
 }

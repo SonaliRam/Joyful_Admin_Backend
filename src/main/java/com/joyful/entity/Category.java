@@ -1,6 +1,8 @@
 package com.joyful.entity;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -10,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -42,7 +45,7 @@ public class Category {
 	@Column(name = "seodescription", columnDefinition = "TEXT")
 	private String seodescription;
 
-	@Column(name="ispublished",nullable = false)
+	@Column(name = "ispublished", nullable = false)
 	private boolean isPublished = false;
 
 	// ✅ CORRECTED MANY-TO-MANY relationship with Subcategory
@@ -56,5 +59,21 @@ public class Category {
 
 	public void setPublished(boolean ispublished) {
 		this.isPublished = ispublished;
+	}
+
+	@Transient
+	@JsonIgnoreProperties("subcategories") // optional if you want to avoid recursive loop
+	private Set<Product> products = new HashSet<>();
+
+	public Set<Product> getProducts() {
+		Set<Product> allProducts = new HashSet<>();
+		if (this.subcategories != null) {
+			for (Subcategory sub : this.subcategories) {
+				if (sub.getProducts() != null) {
+					allProducts.addAll(sub.getProducts());
+				}
+			}
+		}
+		return allProducts;
 	}
 }

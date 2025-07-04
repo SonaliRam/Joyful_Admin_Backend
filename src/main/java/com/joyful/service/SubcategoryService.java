@@ -17,4 +17,6 @@ public interface SubcategoryService {
 
 	List<Subcategory> getSubcategoriesByCategory(Long categoryId);
 
+	boolean hasProducts(Long subcategoryId);
+
 }

@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.joyful.entity.Category;
-import com.joyful.entity.Subcategory;
 import com.joyful.repository.CategoryRepository;
+import com.joyful.repository.SubcategoryRepository;
 import com.joyful.service.CategoryService;
 
 @Service
@@ -16,6 +16,8 @@ public class CategoryServiceImp implements CategoryService {
 
 	@Autowired
 	private CategoryRepository categoryRepo;
+	@Autowired
+	private SubcategoryRepository subcategoryRepository;
 
 	@Override
 	public Category addCategory(Category category) {
@@ -53,6 +55,11 @@ public class CategoryServiceImp implements CategoryService {
 	@Override
 	public Optional<Category> getCategoryByName(String name) {
 	    return categoryRepo.findByNameIgnoreCase(name);   // or findByNameIgnoreCase(name)
+	}
+
+	@Override
+	public boolean hasSubcategories(Long id) {
+		return subcategoryRepository.existsByCategoryId(id);
 	}
 	
 }

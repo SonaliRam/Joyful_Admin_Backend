@@ -16,7 +16,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -72,10 +71,8 @@ public class Product {
 	@JsonIgnoreProperties("products")
 	private Set<Subcategory> subcategories = new HashSet<>();
 
-	@Lob
 	@Basic(fetch = FetchType.EAGER) // ✅ This is the key fix
 	@Column(name = "variantsmap", columnDefinition = "TEXT")
 	private String variantsMap;
-
 
 }

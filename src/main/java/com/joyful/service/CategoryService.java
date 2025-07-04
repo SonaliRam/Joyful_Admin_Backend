@@ -18,5 +18,7 @@ public interface CategoryService {
 
 	Optional<Category> getCategoryByName(String name);
 
+	boolean hasSubcategories(Long id);
+
 
 }

@@ -83,4 +83,12 @@ public class SubcategoryServiceImp implements SubcategoryService {
 	public List<Subcategory> getSubcategoriesByCategory(Long categoryId) {
 		return subcategoryRepo.findByCategoryId(categoryId);
 	}
+
+	@Override
+	public boolean hasProducts(Long subcategoryId) {
+		Subcategory sub = subcategoryRepo.findById(subcategoryId)
+				.orElseThrow(() -> new RuntimeException("Subcategory not found"));
+		return sub.getProducts() != null && !sub.getProducts().isEmpty();
+	}
+
 }
