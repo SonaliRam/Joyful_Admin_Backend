@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -53,9 +54,21 @@ public class Subcategory {
 //	@ManyToMany(mappedBy = "subcategories")
 //	@JsonIgnoreProperties("subcategories")
 //	private Set<Product> products = new HashSet<>();
-	
+
 	@ManyToMany(mappedBy = "subcategories")
 	@JsonIgnore // ✅ temporarily skip products in JSON to fix 500 error
 	private Set<Product> products = new HashSet<>();
+
+//	newly added today
+	@Transient
+	private List<Long> categoryIds;
+
+	public List<Long> getCategoryIds() {
+		return categoryIds;
+	}
+
+	public void setCategoryIds(List<Long> categoryIds) {
+		this.categoryIds = categoryIds;
+	}
 
 }

@@ -21,15 +21,29 @@ public class SubcategoryServiceImp implements SubcategoryService {
 	@Autowired
 	private CategoryRepository categoryRepo;
 
+//	@Override
+//	public Subcategory addSubcategory(Subcategory subcategory) {
+//		// ✅ Fetch valid categories from DB by ID
+//		List<Category> validCategories = subcategory.getCategories().stream()
+//				.map(cat -> categoryRepo.findById(cat.getId())
+//						.orElseThrow(() -> new RuntimeException("Category not found: " + cat.getId())))
+//				.collect(Collectors.toList());
+//
+//		subcategory.setCategories(validCategories);
+//
+//		return subcategoryRepo.save(subcategory);
+//	}
+//	newly added today
 	@Override
 	public Subcategory addSubcategory(Subcategory subcategory) {
-		// ✅ Fetch valid categories from DB by ID
-		List<Category> validCategories = subcategory.getCategories().stream()
-				.map(cat -> categoryRepo.findById(cat.getId())
-						.orElseThrow(() -> new RuntimeException("Category not found: " + cat.getId())))
-				.collect(Collectors.toList());
-
-		subcategory.setCategories(validCategories);
+		// If frontend sent only categoryIds, convert them to full Category entities
+		if (subcategory.getCategoryIds() != null && !subcategory.getCategoryIds().isEmpty()) {
+			List<Category> validCategories = subcategory.getCategoryIds().stream()
+					.map(catId -> categoryRepo.findById(catId)
+							.orElseThrow(() -> new RuntimeException("Category not found: " + catId)))
+					.collect(Collectors.toList());
+			subcategory.setCategories(validCategories);
+		}
 
 		return subcategoryRepo.save(subcategory);
 	}
