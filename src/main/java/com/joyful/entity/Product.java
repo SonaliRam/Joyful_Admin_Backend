@@ -40,6 +40,9 @@ public class Product {
 
 	@Column(name = "mainimage")
 	private String mainimage;
+	
+	@Column(name = "hoverimage")
+	private String hoverimage;
 
 	@ElementCollection
 	@Column(name = "producttags")

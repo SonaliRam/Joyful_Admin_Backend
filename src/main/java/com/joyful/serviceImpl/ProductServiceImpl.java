@@ -38,6 +38,7 @@ public class ProductServiceImpl implements ProductService {
 		existing.setName(updatedProduct.getName());
 		existing.setDescription(updatedProduct.getDescription());
 		existing.setMainimage(updatedProduct.getMainimage());
+		existing.setHoverimage(updatedProduct.getHoverimage());
 		existing.setProducttags(updatedProduct.getProducttags());
 		existing.setFilter(updatedProduct.getFilter());
 		existing.setMetatitle(updatedProduct.getMetatitle());

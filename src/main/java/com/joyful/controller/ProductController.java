@@ -31,10 +31,6 @@ public class ProductController {
 	@Autowired
 	private ProductRepository productRepository;
 
-//	@GetMapping("/{id}")
-//	public Product getProduct(@PathVariable Long id) {
-//		return productService.getProductById(id);
-//	}
 //	newly added code
 	@GetMapping("/{id}")
 	public Product getProduct(@PathVariable Long id) {
