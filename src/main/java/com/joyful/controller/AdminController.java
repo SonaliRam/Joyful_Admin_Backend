@@ -15,7 +15,8 @@ import com.joyful.service.AdminService;
 		    "http://localhost:5173",
 		    "http://localhost:5174",
 		    "http://localhost:3000",
-		    "https://markweb-joyful.netlify.app"
+		    "https://markweb-joyful.netlify.app",
+		    "https://joyful-backend-frontend-production.up.railway.app"
 		  },
 		  allowCredentials = "true"
 		)

@@ -40,10 +40,9 @@ public class Product {
 
 	@Column(name = "mainimage")
 	private String mainimage;
-
+	
 	@Column(name = "hoverimage")
 	private String hoverimage;
-
 	@ElementCollection
 	@Column(name = "producttags")
 	private List<String> producttags;
@@ -63,8 +62,8 @@ public class Product {
 
 	@Column(name = "ispublished", nullable = false)
 	private Boolean ispublished;
-
-	@Column(name = "newarrival", nullable = false)
+	
+	@Column(name="newarrival",nullable=false)
 	private Boolean newarrival;
 
 	public void setIspublished(boolean ispublished) {
