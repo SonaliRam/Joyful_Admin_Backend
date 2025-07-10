@@ -52,11 +52,11 @@ public class Subcategory {
 	private List<Category> categories;
 
 //	@ManyToMany(mappedBy = "subcategories")
-//	@JsonIgnoreProperties("subcategories")
+//	@JsonIgnore // ✅ temporarily skip products in JSON to fix 500 error
 //	private Set<Product> products = new HashSet<>();
 
 	@ManyToMany(mappedBy = "subcategories")
-	@JsonIgnore // ✅ temporarily skip products in JSON to fix 500 error
+	@JsonIgnoreProperties("subcategories") // ✅ Prevents recursive loop
 	private Set<Product> products = new HashSet<>();
 
 //	newly added today

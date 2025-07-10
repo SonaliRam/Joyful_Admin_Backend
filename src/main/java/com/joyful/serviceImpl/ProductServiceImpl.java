@@ -47,11 +47,12 @@ public class ProductServiceImpl implements ProductService {
 		existing.setIspublished(updatedProduct.getIspublished());
 		existing.setSubcategories(updatedProduct.getSubcategories());
 		existing.setVariantsMap(updatedProduct.getVariantsMap());
+		existing.setNewarrival(updatedProduct.getNewarrival());
 		return productRepository.save(existing);
 	}
 
 	@Override
 	public void deleteProduct(Long id) {
 		productRepository.deleteById(id);
-	} 
-} 
+	}
+}

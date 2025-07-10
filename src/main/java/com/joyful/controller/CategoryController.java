@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.joyful.entity.Category;
 import com.joyful.service.CategoryService;
 
+
 @RestController
 @RequestMapping("/categories")
 @CrossOrigin("*")
@@ -62,5 +63,4 @@ public class CategoryController {
 		return categoryService.getCategoryByName(name).map(ResponseEntity::ok)
 				.orElse(ResponseEntity.notFound().build());
 	}
-
 }

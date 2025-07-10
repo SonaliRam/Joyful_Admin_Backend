@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.joyful.entity.Category;
+import com.joyful.entity.Subcategory;
 import com.joyful.repository.CategoryRepository;
 import com.joyful.repository.SubcategoryRepository;
 import com.joyful.service.CategoryService;
@@ -43,23 +44,55 @@ public class CategoryServiceImp implements CategoryService {
 		categoryRepo.deleteById(id);
 	}
 
+//	@Override
+//	public Category getCategoryById(Long id) {
+//		return categoryRepo.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
+//	}
+//
+//	@Override
+//	public List<Category> getAllCategories() {
+//		return categoryRepo.findAll();
+//	}
+
 	@Override
 	public Category getCategoryById(Long id) {
-		return categoryRepo.findById(id).orElseThrow(() -> new RuntimeException("Category not found"));
+	    Category category = categoryRepo.findById(id)
+	            .orElseThrow(() -> new RuntimeException("Category not found"));
+
+	    if (category.getSubcategories() != null) {
+	        for (Subcategory subcategory : category.getSubcategories()) {
+	            // force-load products
+	            subcategory.setProducts(subcategory.getProducts());
+	        }
+	    }
+
+	    return category;
 	}
 
 	@Override
 	public List<Category> getAllCategories() {
-		return categoryRepo.findAll();
+	    List<Category> categories = categoryRepo.findAll();
+
+	    for (Category category : categories) {
+	        if (category.getSubcategories() != null) {
+	            for (Subcategory subcategory : category.getSubcategories()) {
+	                subcategory.setProducts(subcategory.getProducts());
+	            }
+	        }
+	    }
+
+	    return categories;
 	}
+
+
 	@Override
 	public Optional<Category> getCategoryByName(String name) {
-	    return categoryRepo.findByNameIgnoreCase(name);   // or findByNameIgnoreCase(name)
+		return categoryRepo.findByNameIgnoreCase(name); // or findByNameIgnoreCase(name)
 	}
 
 	@Override
 	public boolean hasSubcategories(Long id) {
 		return subcategoryRepository.existsByCategoryId(id);
 	}
-	
+
 }

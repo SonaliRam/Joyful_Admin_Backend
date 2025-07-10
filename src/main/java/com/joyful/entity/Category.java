@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -61,8 +62,12 @@ public class Category {
 		this.isPublished = ispublished;
 	}
 
+//	@Transient
+//	@JsonIgnoreProperties("subcategories") // optional if you want to avoid recursive loop
+//	private Set<Product> products = new HashSet<>();
+	
 	@Transient
-	@JsonIgnoreProperties("subcategories") // optional if you want to avoid recursive loop
+	@JsonIgnore // ✅ This hides the top-level products list in JSON
 	private Set<Product> products = new HashSet<>();
 
 	public Set<Product> getProducts() {
