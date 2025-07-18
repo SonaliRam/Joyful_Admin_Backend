@@ -1,6 +1,5 @@
 package com.joyful.util;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,21 +11,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CsvImportResult {
+
     private int totalRows;
     private int successRows;
     private int skippedRows;
-    private List<RowError> errors = new ArrayList<>();
+    private boolean success;
+    private String message;
+    private List<SkippedRow> skippedRowsList = new ArrayList<>();
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class RowError {
+    public static class SkippedRow {
         private int rowNumber;
         private String reason;
     }
 
-    public void addError(int row, String reason) {
-        errors.add(new RowError(row, reason));
+    public void addSkippedRow(int row, String reason) {
+        this.skippedRowsList.add(new SkippedRow(row, reason));
         skippedRows++;
     }
 
@@ -37,4 +39,4 @@ public class CsvImportResult {
     public void incrementTotal() {
         totalRows++;
     }
-} 
+}

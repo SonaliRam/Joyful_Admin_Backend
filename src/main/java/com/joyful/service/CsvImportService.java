@@ -6,4 +6,5 @@ import com.joyful.util.CsvImportResult;
 
 public interface CsvImportService {
     CsvImportResult importCsv(MultipartFile file) throws Exception;
+    CsvImportResult parseAndImport(MultipartFile file);
 }

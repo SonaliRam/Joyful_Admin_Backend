@@ -1,10 +1,12 @@
 package com.joyful.controller;
 
+import java.util.Map;
+import java.util.Objects;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,31 +17,30 @@ import com.joyful.util.CsvImportResult;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/upload-csv")
 @RequiredArgsConstructor
 public class CsvUploadController {
 
 	private final CsvImportService csvImportService;
 
-	@PostMapping
-	public ResponseEntity<?> handleCsvUpload(@RequestParam("file") MultipartFile file) {
+	@PostMapping("/upload-csv")
+	public ResponseEntity<?> uploadCSV(@RequestParam("file") MultipartFile file) {
 		if (file.isEmpty()) {
-			return ResponseEntity.badRequest().body("CSV file is required");
+			return ResponseEntity.badRequest().body(Map.of("error", "File is empty"));
 		}
 
-		if (!file.getOriginalFilename().endsWith(".csv") && !file.getOriginalFilename().endsWith(".txt")) {
-			return ResponseEntity.badRequest().body("Only .csv or .txt files are allowed");
-		}
-
-		if (file.getSize() > 10 * 1024 * 1024) {
-			return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("File size exceeds 10MB limit");
+		if (!Objects.requireNonNull(file.getOriginalFilename()).endsWith(".csv")) {
+			return ResponseEntity.badRequest().body(Map.of("error", "Only .csv files are allowed"));
 		}
 
 		try {
-			CsvImportResult result = csvImportService.importCsv(file);
-			return ResponseEntity.ok(result);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Import failed: " + e.getMessage());
+			CsvImportResult result = csvImportService.parseAndImport(file);
+
+			// ✅ Set success based on number of successful rows
+			result.setSuccess(result.getSuccessRows() > 0);
+
+			return ResponseEntity.ok(result); // this returns JSON
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", ex.getMessage()));
 		}
 	}
 
@@ -48,4 +49,4 @@ public class CsvUploadController {
 		// TODO: Return a sample CSV file
 		return ResponseEntity.ok("Template endpoint not implemented yet");
 	}
-} 
+}
